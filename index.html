@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vanilla JS</title>
+    <style>
+        #root{
+            font-size: 55px;
+            text-align: center;
+            margin-top: 30vh;
+            margin-bottom: 30px;
+        }
+        #incr{
+            text-align: center;
+            align-content: center;
+            padding: 10px 32px;
+            margin-right: 30px;
+        }
+        #decr{
+            text-align: center;
+            align-content: center;
+            padding: 10px 32px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <center>
+        <button id="incr">increment</button>
+    <button id="decr">decrement</button>
+    </center>
+</body>
+    <script>
+        let state= {
+            counter: 21
+        }
+                document.getElementById("root").innerHTML= state.counter;
+
+        function reducer(state, action){
+            switch(action){
+                case 'INC':
+                    return { ...state, counter: state.counter + 1 };
+                case 'DEC':
+                    return { ...state, counter: state.counter - 1};
+                default: 
+                    return state;
+            }
+        }
+        
+        function dispatch(action){
+            const newState = reducer(state, action);
+            if(newState !== state){
+                state=newState;
+                
+                listeners.forEach(listener=>listener())
+            }
+        }
+        const listeners = [];
+        
+        function subscribe(callback){
+            listeners.push(callback);
+        }
+        
+        document.querySelector('#incr').onclick = ()=> dispatch('INC');
+        document.querySelector('#decr').onclick = ()=> dispatch('DEC');
+        
+        function updateView(){
+            document.querySelector('#root').innerHTML = state.counter;
+        }
+        
+        subscribe(updateView);
+    </script>
+</html>
